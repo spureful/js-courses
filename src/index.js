@@ -14,11 +14,11 @@
  */
 function returnFirstArgument(argum) {
 
-	return argum;
+    return argum;
 }
 
-var returnFirstArgumentRes = returnFirstArgument('hello');
-console.log('task 1: ' + returnFirstArgumentRes);
+returnFirstArgument('hello');
+
 /*
  Задание 2:
 
@@ -35,23 +35,21 @@ console.log('task 1: ' + returnFirstArgumentRes);
  */
 function sumWithDefaults(a, b = 100) {
 
-	return a + b;
+    return a + b;
 
 }
 
-var sumWithDefaultsRes = sumWithDefaults(30, 3);
-console.log('task 2.1: ' + sumWithDefaultsRes);
+sumWithDefaults(30, 3);
 
-//task  2.1 *: Значение по умолчанию для второго аргумента должно быть равно 100
+// task  2.1 *: Значение по умолчанию для второго аргумента должно быть равно 100
 
 function sumWithDefaultsPlus(a, b = 100) {
 
-	return a + b;
+    return a + b;
 
 }
 
-var sumWithDefaultsPlusRes = sumWithDefaultsPlus(5);
-console.log('task 2.1 *: ' + sumWithDefaultsPlusRes);
+sumWithDefaultsPlus(5);
 
 /*
  Задание 3:
@@ -63,13 +61,11 @@ console.log('task 2.1 *: ' + sumWithDefaultsPlusRes);
  */
 function returnFnResult(fn) {
 
-	return fn();
+    return fn();
 
 }
 
-var returnFnResultRes = returnFnResult(() => 'hello again')
-console.log('task 3: ' + returnFnResultRes);
-
+returnFnResult(() => 'hello again')
 
 /*
  Задание 4:
@@ -86,19 +82,15 @@ console.log('task 3: ' + returnFnResultRes);
  */
 function returnCounter(number = 0) {
 
+    return function () {
+        number++;
+        
+        return number;
 
-
-	return function () {
-		number++;
-		return number;
-
-	}
+    }
 }
 
-var returnCounterRes = returnCounter(10);
-console.log('task 4(step 1): ' + returnCounterRes());
-console.log('task 4(step 2): ' + returnCounterRes());
-console.log('task 4(step 3): ' + returnCounterRes());
+returnCounter(10);
 
 /*
  Задание 5 *:
@@ -110,12 +102,11 @@ console.log('task 4(step 3): ' + returnCounterRes());
    returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
 function returnArgumentsArray(...args) {
-	return args
+    
+    return args
 }
 
-
-var returnArgumentsArrayRes = returnArgumentsArray(1, 2, 3, 4, 5)
-console.log('task 5: ' + returnArgumentsArrayRes);
+returnArgumentsArray(1, 2, 3, 4, 5)
 
 /*
  Задание 6 *:
@@ -134,36 +125,31 @@ console.log('task 5: ' + returnArgumentsArrayRes);
  */
 function bindFunction(fn, ...args) {
 
-	fn = fn.bind(null, ...args);
-	return fn;
+    fn = fn.bind(null, ...args);
+    
+    return fn;
 
 }
 // cделала две функции sum и mul для теста
 function sum(c, d, e) {
 
-	return c + d + e;
+    return c + d + e;
 
 }
-
 
 function mul(c, d) {
-	return c * d;
+    return c * d;
 }
 
-var bindFunctionRes = bindFunction(sum, 1, 2, 3);
-//6
-console.log('task 6(sum): ' + bindFunctionRes());
+bindFunction(sum, 1, 2, 3);
 
-var bindFunctionRes = bindFunction(mul, 2, 4);
-//8
-
-console.log('task 6(mul): ' + bindFunctionRes());
+bindFunction(mul, 2, 4);
 
 export {
-	returnFirstArgument,
-	sumWithDefaults,
-	returnArgumentsArray,
-	returnFnResult,
-	returnCounter,
-	bindFunction
+    returnFirstArgument,
+    sumWithDefaults,
+    returnArgumentsArray,
+    returnFnResult,
+    returnCounter,
+    bindFunction
 }
