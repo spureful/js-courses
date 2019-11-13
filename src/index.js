@@ -35,8 +35,8 @@ console.log('task 1: ' + returnFirstArgumentRes);
  */
 function sumWithDefaults(a, b = 100) {
 
-	let c = a + b;
-	return c;
+	return a + b;
+
 }
 
 var sumWithDefaultsRes = sumWithDefaults(30, 3);
@@ -46,9 +46,8 @@ console.log('task 2.1: ' + sumWithDefaultsRes);
 
 function sumWithDefaultsPlus(a, b = 100) {
 
-	let c = a + b;
+	return a + b;
 
-	return c;
 }
 
 var sumWithDefaultsPlusRes = sumWithDefaultsPlus(5);
@@ -64,8 +63,8 @@ console.log('task 2.1 *: ' + sumWithDefaultsPlusRes);
  */
 function returnFnResult(fn) {
 
-	var fnR = fn();
-	return fnR;
+	return fn();
+
 }
 
 var returnFnResultRes = returnFnResult(() => 'hello again')
@@ -90,11 +89,8 @@ function returnCounter(number = 0) {
 
 
 	return function () {
-		var numberRes = number + 1;
-
-		number = numberRes;
-
-		return numberRes;
+		number++;
+		return number;
 
 	}
 }
@@ -139,15 +135,15 @@ console.log('task 5: ' + returnArgumentsArrayRes);
 function bindFunction(fn, ...args) {
 
 	fn = fn.bind(null, ...args);
-	return fn();
+	return fn;
 
 }
 // cделала две функции sum и mul для теста
 function sum(c, d, e) {
-	 	
+
 	return c + d + e;
 
-	}
+}
 
 
 function mul(c, d) {
@@ -156,12 +152,12 @@ function mul(c, d) {
 
 var bindFunctionRes = bindFunction(sum, 1, 2, 3);
 //6
-console.log('task 6(sum): ' + bindFunctionRes);
+console.log('task 6(sum): ' + bindFunctionRes());
 
 var bindFunctionRes = bindFunction(mul, 2, 4);
 //8
 
-console.log('task 6(mul): ' + bindFunctionRes);
+console.log('task 6(mul): ' + bindFunctionRes());
 
 export {
 	returnFirstArgument,
