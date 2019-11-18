@@ -73,10 +73,8 @@ function upperProps(obj) {
 
     for (let item in obj) {
 
-        if (obj) {
-            upperArr.push(item.toUpperCase());
-        }
-
+        upperArr.push(item.toUpperCase());
+    
     }
 
     return upperArr;
@@ -91,125 +89,30 @@ function slice(array, from, to) {
 
     let newArr = [];
 
+    (from < 0 ) ? (from = array.length + from) : from;
+    (to < 0 ) ? (to = array.length + to) : to;
+    (to > array.length) ? (to = array.length) : to;
+
     for (let i = 0; i < array.length; i++) {
+
+        (from < 0) ? (from = 0) : from;
+
         if (!from && !to && to != 0) {
             newArr = array
-        } else if (from >= 0 && !to && to != 0) {
-        
+        } else if (from && !to && to != 0) {
+            (from < 0) ? (from = 0) : from;
             while (from < array.length) {
                 pushArr();
             }
-        } else if (from < 0 && !to ) {
-
-            from = array.length + from;
-
-            if (from > 0) {
-
-                while (from < array.length) {
-
-                    pushArr();
-
-                }
-
-            } else {
-
-                newArr = array;
-
-            }
-    
-        } else if ( from >= 0 && to > 0 ) {
-
-            if ( to < array.length) {
-
-                while (from < to) {
-
-                    pushArr();
-
-                }
-
-            } else {
-
-                while (from < array.length) {
-
-                    pushArr();
-
-                }
-
-            }
-
-        } else if ( from >= 0 && to < 0 ) {
-
-            to = array.length + to;
-
-            if (to > 0) {
-
-                while (from < to ) {
-
-                    pushArr();
-                }
-            } else {
-
-                newArr.length = 0;
-            }
-
-        } else if ( from < 0 && to < 0 && from < to ) {
-
-            from = array.length + from;
-
-            to = array.length + to;
-
-            if (from > 0) {
-
-                while (from < to) {
-
-                    pushArr();
-
-                } 
-
-            } else {
-
-                from = 0;
-
-                while (from < to) {
-
-                    pushArr();
-
-                }
-            } 
-
-        } else if (from < 0 && to > 0) {
-
-            from = array.length + from;
-
-            if (from > 0) {
-
-                while (from < to) {
-
-                    pushArr();
-
-                }
-            } else {
-
-                from = 0;
-
-                while (from < to) {
-
-                    pushArr();
-
-                }
-            }
-        
         } else {
-
-            newArr.length = 0;
-
+            while (from < to) {
+                pushArr();
+            }
         }
     }
     
     function pushArr() {
-
         newArr.push(array[from]);
-
         from++; 
     }
 
@@ -237,11 +140,8 @@ function createProxy(obj) {
         }
     }
 
-    obj = {};
+    return new Proxy(obj, objProxyHandler); 
 
-    obj = new Proxy(obj, objProxyHandler); 
-
-    return obj;
 }
 
 export {
