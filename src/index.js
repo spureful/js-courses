@@ -18,56 +18,35 @@
  */
 function isAllTrue(array, fn) {
    
-	if (!Array.isArray(array) || array.length <= 0) {
-
-        throw new Error( "empty array");
-
+    if (!Array.isArray(array) || array.length <= 0) {
+        throw new Error( 'empty array');
     } else if (typeof fn !== 'function') {
-
-        throw new Error( "fn is not a function")
-
+        throw new Error( 'fn is not a function')
     } 
-
   
-try {
+    try {
 
-	let falseVar = 0;
-	
-	for (let i = 0; i < array.length; i++) {
-	
-		fn(array[i]);
+        let trueVar = 0;
+        let testVar;
 
-		console.log(fn(array[i]));
+        for (let i = 0; i < array.length; i++) {
 
-		if (fn(array[i])) {
+            testVar = fn(array[i]);
 
-			falseVar++;
-
-			console.log(array[i])
-		} 
-		
-	}	
-	
-	if (falseVar > 0) {
-		return false
-	} else { return true }
-	
-	  
-  } catch(e) {
-
-	  console.log(e.message);
-	  
-      return false;
-
-  }
+            testVar ? trueVar++ : trueVar;
+            
+        }
+    
+        if (trueVar < array.length) {
+            return false
+        } else if (trueVar == array.length ) {
+            return true 
+        }
+          
+    } catch (e) {
+        alert(e.message);
+    }
 }
-
-const result = isAllTrue([1, 2, 3, 4, 5, 6, 11], n => n < 10) // вернет true
-const result2 = isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
-
-console.log(result)
-console.log(result2)
-
 /*
  Задание 2:
 
@@ -85,6 +64,35 @@ console.log(result2)
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
 function isSomeTrue(array, fn) {
+    if (!Array.isArray(array) || array.length <= 0) {
+        throw new Error( 'empty array');
+    } else if (typeof fn !== 'function') {
+        throw new Error( 'fn is not a function')
+    } 
+  
+    try {
+
+        let trueVar = 0;
+        let testVar;
+
+        for (let i = 0; i < array.length; i++) {
+
+            testVar = fn(array[i]);
+
+            testVar ? trueVar++ : trueVar;
+            
+        }
+    
+        if (trueVar == 0) {
+            return false
+        } else if (trueVar > 0 ) {
+            return true 
+        }
+          
+    } catch (e) {
+        alert(e.message);
+    }
+
 }
 
 /*
@@ -98,9 +106,27 @@ function isSomeTrue(array, fn) {
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn) {
-}
+function returnBadArguments(fn, ...args) {
 
+    if (typeof fn !== 'function') {
+        throw new Error('fn is not a function')
+    }
+
+    let newArr = [];
+   
+    for (let i = 0; i < args.length; i++) {
+   
+        try {               
+            fn(args[i]); 
+        } catch (e) {
+            alert(e.message);        
+            newArr.push(args[i]);
+        }
+    }
+    
+    return newArr;    
+
+}
 /*
  Задание 4:
 
@@ -118,11 +144,64 @@ function returnBadArguments(fn) {
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
+function calculator( n = 0) {
+
+    if (!isFinite(n)) {
+        throw new Error('number is not a number');
+    }
+
+    try {
+        const obj = {
+            sum: function(...args) {
+                let sumVar = n;
+
+                for (let i = 0; i < args.length; i++) {
+                    sumVar += args[i];
+                }
+
+                return sumVar;
+            },
+            dif: function(...args) {
+                let difVar = n;
+
+                for (let i = 0; i < args.length; i++) {
+                    difVar -= args[i];
+                }
+
+                return difVar;
+            },
+            div: function(...args) {
+                let divVar = n;
+
+                for (let i = 0; i < args.length; i++) {
+                    
+                    if (divVar === 0 || args[i] === 0) {
+                        throw new Error('division by 0');
+                    }
+                    
+                    divVar = divVar/args[i];            
+                }
+                
+                return divVar;
+            },
+            mul: function(...args) {
+                let mulVar = n;
+
+                for (let i = 0; i < args.length; i++) {
+                    mulVar = mulVar * args[i];            
+                }
+
+                return mulVar;
+            },
+        }
+
+        return obj;
+
+    } catch (e) {
+        alert(e.message);
+    }
 }
-
 /* При решении задач, пострайтесь использовать отладчик */
-
 export {
     isAllTrue,
     isSomeTrue,
