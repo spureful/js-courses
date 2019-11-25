@@ -11,6 +11,11 @@
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
 function createDivWithText(text) {
+    const newEl = document.createElement('div');
+
+    newEl.innerHTML = text;
+
+    return newEl;
 }
 
 /*
@@ -22,6 +27,7 @@ function createDivWithText(text) {
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
 function prepend(what, where) {
+    where.prepend(what);    
 }
 
 /*
@@ -44,6 +50,15 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
+    let pSiblings = [];
+    
+    const elArr = where.getElementsByTagName('p');
+  
+    for (let i = 0; i < elArr.length; i++ ) {
+        pSiblings.push(elArr[i].previousElementSibling)
+    }
+
+    return pSiblings;
 }
 
 /*
@@ -66,7 +81,7 @@ function findAllPSiblings(where) {
 function findError(where) {
     var result = [];
 
-    for (var child of where.childNodes) {
+    for (var child of where.children) {
         result.push(child.innerText);
     }
 
@@ -86,6 +101,16 @@ function findError(where) {
    должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
+
+    const nodes = where.childNodes;
+  
+    nodes.forEach(function findText(item) {
+
+        if (item.nodeType == 3) {
+            item.remove();
+        }
+
+    })
 }
 
 /*
@@ -100,8 +125,20 @@ function deleteTextNodes(where) {
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
-}
 
+    const nodes = where.childNodes;
+  
+    nodes.forEach(function findText(item) {
+
+        if (item.nodeType == 3) {
+            item.remove();
+        }
+
+        nodes.forEach(function(item) {
+            deleteTextNodesRecursive(item)
+        })      
+    })    
+}
 /*
  Задание 7 *:
 
@@ -123,8 +160,52 @@ function deleteTextNodesRecursive(where) {
    }
  */
 function collectDOMStat(root) {
-}
+  
+    const statObj = {
+        tags: {},   
+        classes: {},
+        texts: 0
+    };
 
+    const tagsItems = {};
+    const classItems = {};
+    
+    function getStat(el) {
+        if (el.nodeType === 3) {
+            
+            ++statObj.texts;
+            
+        } else if (el.nodeType === 1) {
+         
+            (tagsItems[el.tagName]) ? (tagsItems[el.tagName] += 1) : (tagsItems[el.tagName] = 1);              
+     
+            statObj.tags = tagsItems;
+
+            const classes = el.classList;
+
+            for (let i = 0; i < classes.length; i++) {
+                if (classes[i] != '' ) {        
+                    (classItems[classes[i]]) ? (classItems[classes[i]] += 1) : (classItems[classes[i]] = 1);         
+                }
+            }
+            statObj.classes = classItems;       
+        }
+     
+        if (el.childNodes.length > 0) {
+            el.childNodes.forEach(function(child) {
+                getStat(child)
+            });
+        }
+    }
+
+    root.childNodes.forEach(function(item) {
+        getStat(item);
+  
+    });
+   
+    return statObj;
+  
+}
 /*
  Задание 8 *:
 
@@ -158,6 +239,38 @@ function collectDOMStat(root) {
    }
  */
 function observeChildNodes(where, fn) {
+
+    const obj = {
+        type: '',
+        nodes: []
+    }
+   
+    let observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                if (mutation.addedNodes.length) {                                        
+                    
+                    obj.type = 'insert';
+                    obj.nodes.push(...mutation.addedNodes);
+                  
+                } else if (mutation.removedNodes.length) {
+                    obj.type = 'remove';
+                    obj.nodes.push(...mutation.removedNodes);
+                  
+                }
+            }
+            
+        });
+        
+        fn(obj);
+            
+    });
+
+    observer.observe(where, {
+        childList: true, 
+        subtree: true
+    });
+
 }
 
 export {
