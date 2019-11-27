@@ -50,7 +50,7 @@ function prepend(what, where) {
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
-    let pSiblings = [];
+    const pSiblings = [];
     
     const elArr = where.getElementsByTagName('p');
   
@@ -128,16 +128,20 @@ function deleteTextNodesRecursive(where) {
 
     const nodes = where.childNodes;
   
-    nodes.forEach(function findText(item) {
+    nodes.forEach(function (item) {
 
         if (item.nodeType == 3) {
             item.remove();
         }
+    
+    })  
+    nodes.forEach(function (item) {
 
-        nodes.forEach(function(item) {
+        if (item.childNodes.length > 0) {
             deleteTextNodesRecursive(item)
-        })      
-    })    
+        }
+    
+    })   
 }
 /*
  Задание 7 *:
