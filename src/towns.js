@@ -37,6 +37,20 @@ const homeworkContainer = document.querySelector('#homework-container');
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
 function loadTowns() {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            const response = await fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
+         
+            if (response.ok) {
+                const citiesArr = await response.json();
+                citiesArr.sort((a, b) => (a.name < b.name && -1) || (a.name > b.name && 1) || 0);
+                resolve(citiesArr);
+            } 
+        } catch (e) {
+            reject()
+        }
+})
 }
 
 /*
@@ -51,6 +65,15 @@ function loadTowns() {
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
+    const fullUP = full.toUpperCase();
+    const chunkUp = chunk.toUpperCase();
+    
+    console.log( fullUP, chunkUp)
+    
+    if (fullUP.includes(chunkUp)) {
+      return true
+    } else { 
+      return false };
 }
 
 /* Блок с надписью "Загрузка" */
@@ -62,8 +85,61 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
+/* Здесь реализуем следующее: Во время загрузки городов, на странице должна быть надпись "Загрузка..."
+ После окончания загрузки городов, надпись исчезает и появляется текстовое поле.
+ 
+ Плюс часть со звездочкой - при ошибке загрузки добавляем окно с кнопкой повторить*/
+
+const errorDiv = document.createElement('div');
+const errorBtn = document.createElement('button');
+
+
+async function loadList()  {
+    try {
+        await loadTowns();
+      loadingBlock.style.display = 'none';
+      filterBlock.style.display = 'block';
+             
+      } 
+    catch(e) {
+        errorDiv.textContent = 'Не удалось загрузить города';
+        errorBtn.textContent = 'Повторить';
+        errorDiv.appendChild(errorBtn);
+        homeworkContainer.appendChild(errorDiv);
+               
+    }
+    
+  
+};
+  
+loadList()
+  
+if(errorBtn) {
+    errorBtn.addEventListener('click', () => {
+        loadList();
+        homeworkContainer.removeChild(errorDiv);
+    })
+}
+
 filterInput.addEventListener('keyup', function() {
-    // это обработчик нажатия кливиш в текстовом поле
+    filterResult.innerHTML = '';
+  
+    (async () => {
+      
+        const val = filterInput.value;
+        const citiesArr = await loadTowns();
+        
+        for (const city of citiesArr) {     
+           const cityItem = document.createElement('div');
+    
+            if (isMatching(city.name, val) && (val != '')) {
+                cityItem.textContent = city.name;
+                filterResult.appendChild(cityItem);        
+            }        
+        }    
+   
+    })();
+  
 });
 
 export {

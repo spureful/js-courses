@@ -8,7 +8,15 @@
  Пример:
    delayPromise(3) // вернет promise, который будет разрешен через 3 секунды
  */
-function delayPromise(seconds) {
+function delayPromise(ms) {
+
+    return new Promise((resolve) => {
+        setTimeout( () => {
+            resolve();
+        }, ms * 1000)
+    });
+
+  
 }
 
 /*
@@ -25,6 +33,16 @@ function delayPromise(seconds) {
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
 function loadAndSortTowns() {
+   
+    return new Promise(async (resolve) => {
+            
+          const response = await fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json');
+          const citiesArr = await response.json();
+          citiesArr.sort((a, b) => (a.name < b.name && -1) || (a.name > b.name && 1) || 0); 
+          
+         resolve(citiesArr);
+      
+ })
 }
 
 export {
