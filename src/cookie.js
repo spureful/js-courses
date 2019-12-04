@@ -47,16 +47,16 @@ const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
-//    const cookieRows =  listTable.querySelectorAll('tr');
+   const cookieRows =  listTable.querySelectorAll('tr');
   
-//   for (const cookieRow of cookieRows) {
-//     if(cookieRow.textContent.includes(filterNameInput.value)) {
-//       cookieRow.style.display = 'table-row'
-//     }else {
-//        cookieRow.style.display = 'none'
-//     }
+  for (const cookieRow of cookieRows) {
+    if(cookieRow.textContent.includes(filterNameInput.value)) {
+      cookieRow.style.display = 'table-row'
+    }else {
+       cookieRow.style.display = 'none'
+    }
     
-//   }
+  }
 
 
 });
@@ -66,26 +66,32 @@ addButton.addEventListener('click', () => {
   // здесь можно обработать нажатие на кнопку "добавить cookie"
   
   
-//   const cookiesName = document.querySelectorAll('.name-cookie');
+  const cookiesName = document.querySelectorAll('.name-cookie');
  
-//   setCookie(addNameInput.value, addValueInput.value);
+  setCookie(addNameInput.value, addValueInput.value);
   
-    
-//   if (addNameInput.value.includes(filterNameInput.value) || addValueInput.value.includes(filterNameInput.value) || filterNameInput.value == '') {
-//     addTr(addNameInput.value,  addValueInput.value);}
+  const cookieParse = document.cookie.split('; ').reduce((prev, current) => {
+  const[name, value] = current.split('=');
+  prev[name] = value;
+  return prev;
+}, {});
   
-//   for (const cookieName of cookiesName) {
-//       if(cookieName.textContent == addNameInput.value && (addValueInput.value.includes(filterNameInput.value) || filterNameInput.value == '')) {
-//         cookieName.nextSibling.textContent = addValueInput.value;
-//         listTable.lastChild.remove();
-//       } else if (cookieName.textContent == addNameInput.value && (!addValueInput.value.includes(filterNameInput.value) && filterNameInput.value != '')){
-//         cookieName.parentNode.remove();
-//         listTable.lastChild.remove();
-//       }
+  const cookieParseKeys = Object.keys(cookieParse);
+  
+  if (addNameInput.value.includes(filterNameInput.value) || addValueInput.value.includes(filterNameInput.value) || filterNameInput.value == '') {
+    addTr(addNameInput.value,  addValueInput.value);}
+  
+  for (const cookieName of cookiesName) {
+      if(cookieName.textContent == addNameInput.value && (addValueInput.value.includes(filterNameInput.value) || filterNameInput.value == '')) {
+        cookieName.nextSibling.textContent = addValueInput.value;
+        listTable.lastChild.remove();
+      } else if (cookieName.textContent == addNameInput.value && (!addValueInput.value.includes(filterNameInput.value) && filterNameInput.value != '')){
+        cookieName.parentNode.remove();
+        listTable.lastChild.remove();
+      }
    
-//   }
+  }
 
-document.cookie = '123=123'
 
   addNameInput.value = '';
   addValueInput.value = '';
@@ -119,6 +125,7 @@ function addTr(name, val) {
   cookieName.classList.add('name-cookie');
    
   cookieValue.innerText = val;
+//   cookieValue.classList.add('val-cookie');
   
   cookieDelete.appendChild(cookieDeleteBtn);
   cookieRaw.appendChild(cookieName);
@@ -154,4 +161,4 @@ function deleteCookie(name) {
   setCookie(name, "", {
     'max-age': -1
   })
-} 
+}
