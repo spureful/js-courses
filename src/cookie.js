@@ -84,29 +84,23 @@ addButton.addEventListener('click', () => {
     
     if (addNameInput.value || addValueInput.value ) {
         setCookie(addNameInput.value, addValueInput.value);
-    
-  
-
-    // fullTable();
-
-    if (addNameInput.value.includes(filterNameInput.value) || addValueInput.value.includes(filterNameInput.value)) {
-        addTr(addNameInput.value,  addValueInput.value);
-    }
+       
+        if (addNameInput.value.includes(filterNameInput.value) || addValueInput.value.includes(filterNameInput.value)) {
+            addTr(addNameInput.value,  addValueInput.value);
+        }
    
     
-    for (const cookieName of cookiesName) {
+        for (const cookieName of cookiesName) {
  
-        if(cookieName.textContent == addNameInput.value ) {
+            if(cookieName.textContent == addNameInput.value ) {
 
-            if(!addNameInput.value.includes(filterNameInput.value) && !addValueInput.value.includes(filterNameInput.value)) {
-                // cookieName.nextSibling.textContent = addValueInput.value;
-                cookieName.parentNode.remove();
-                                
+                if(!addNameInput.value.includes(filterNameInput.value) && !addValueInput.value.includes(filterNameInput.value)) {
+                cookieName.parentNode.remove();                          
+                } else {
+                    cookieName.nextSibling.textContent = addValueInput.value;
+                    listTable.lastChild.remove();   }
+                           
             } 
-            cookieName.nextSibling.textContent = addValueInput.value;
-            listTable.lastChild.remove();                  
-        } 
-        
         }
     }
     addNameInput.value = '';
@@ -117,20 +111,17 @@ addButton.addEventListener('click', () => {
 
 listTable.addEventListener('click', function(e) {
   
-        if (e.target.tagName == 'BUTTON') {
-          const btnParent = e.target.parentNode;
-          btnParent.parentNode.remove();
+    if (e.target.tagName == 'BUTTON') {
+        const btnParent = e.target.parentNode;
+        btnParent.parentNode.remove();
           
-          deleteCookie(btnParent.parentNode.firstChild.textContent);
-                
-                   
-        }
+        deleteCookie(btnParent.parentNode.firstChild.textContent);
+    }
 });
 
 function fullTable() {
     if(document.cookie) {
         for (const cookie of cookieParse()) {
-        
             addTr(cookie[0], cookie[1]);
         }
     }
@@ -142,49 +133,46 @@ function fullTable() {
 };
 
 function addTr(name, val) {
-  const cookieRaw = document.createElement('tr');
-  const cookieName = document.createElement('td');
-  const cookieValue = document.createElement('td');
-  const cookieDelete = document.createElement('td');
-  const cookieDeleteBtn = document.createElement('button');
-  const fragment = document.createDocumentFragment();
+    const cookieRaw = document.createElement('tr');
+    const cookieName = document.createElement('td');
+    const cookieValue = document.createElement('td');
+    const cookieDelete = document.createElement('td');
+    const cookieDeleteBtn = document.createElement('button');
+    const fragment = document.createDocumentFragment();
   
-  cookieDeleteBtn.textContent = 'удалить';
-  cookieDeleteBtn.classList.add('delete-cookie')
+    cookieDeleteBtn.textContent = 'удалить';
+    cookieDeleteBtn.classList.add('delete-cookie')
   
-  cookieName.innerText = name;
-  cookieName.classList.add('name-cookie');
+    cookieName.innerText = name;
+    cookieName.classList.add('name-cookie');
    
-  cookieValue.innerText = val;
+    cookieValue.innerText = val;
   
-  cookieDelete.appendChild(cookieDeleteBtn);
-  cookieRaw.appendChild(cookieName);
-  cookieRaw.appendChild(cookieValue);
-  cookieRaw.appendChild(cookieDelete);
+    cookieDelete.appendChild(cookieDeleteBtn);
+    cookieRaw.appendChild(cookieName);
+    cookieRaw.appendChild(cookieValue);
+    cookieRaw.appendChild(cookieDelete);
   
- fragment.appendChild(cookieRaw);
- listTable.appendChild(fragment);
-
+    fragment.appendChild(cookieRaw);
+    listTable.appendChild(fragment);
 }
 
 function setCookie(name, value, options = {}) {
-
-  options = {
+    options = {
     ...options
-  };
+    };
 
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
 
-  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-  for (let optionKey in options) {
-    updatedCookie += "; " + optionKey;
-    let optionValue = options[optionKey];
-    if (optionValue !== true) {
-      updatedCookie += "=" + optionValue;
+    for (let optionKey in options) {
+        updatedCookie += "; " + optionKey;
+        let optionValue = options[optionKey];
+        if (optionValue !== true) {
+        updatedCookie += "=" + optionValue;
+        }
     }
-  }
     
-  document.cookie = updatedCookie;
+    document.cookie = updatedCookie;
   
 }
 
